@@ -18,7 +18,7 @@ module tt_um_example (
 
   
     
-  register b_register(.clk(clk),.n_load(ui_in [0]),.bus(ui_in),.value(uo_out));
+    register b_register(.clk(clk),.n_load(uio_in [0]),.bus(ui_in),.value(uo_out));
     
   // All output pins must be assigned. If not used, assign to 0.
   // assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
