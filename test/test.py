@@ -45,7 +45,7 @@ async def input_mar_register_test(dut):
     await FallingEdge(dut.clk)
     dut.uio_in.value = 0b11
     await FallingEdge(dut.clk)
-    assert (int(dut.uio_out.value.binstr[-4:]) & 0xF) == 0b0110, f"Expected addr 0b0110, got {(int(dut.uio_out.value.binstr[-4:]) & 0xF)}"
+    assert (int(dut.uio_out.value.binstr[-4:], 2) & 0xF) == 0b0110, f"Expected addr 0b0110, got {(int(dut.uio_out.value.binstr[-4:], 2) & 0xF)}"
 
     # 4. Change bus, verify no load when load signals are high
     dut._log.info("Change bus, verify no load with high load signals")
@@ -54,7 +54,7 @@ async def input_mar_register_test(dut):
     dut.ui_in.value = 0b11101011
     await FallingEdge(dut.clk)
     assert dut.uo_out.value == 0b10011011, f"Data should remain 0b10011011, got {dut.uo_out.value}"
-    assert (int(dut.uio_out.value.binstr[-4:]) & 0xF) == 0b0110, f"Addr should remain 0b0110, got {(int(dut.uio_out.value.binstr[-4:]) & 0xF)}"
+    assert (int(dut.uio_out.value.binstr[-4:], 2) & 0xF) == 0b0110, f"Addr should remain 0b0110, got {(int(dut.uio_out.value.binstr[-4:], 2) & 0xF)}"
 
     # 5. Load both data and addr at the same time
     dut._log.info("Loading both data and addr simultaneously")
@@ -63,7 +63,7 @@ async def input_mar_register_test(dut):
     dut.uio_in.value = 0b11
     await FallingEdge(dut.clk)
     assert dut.uo_out.value == 0b11101011, f"Expected data 0b11110000, got {dut.uo_out.value}"
-    assert (int(dut.uio_out.value.binstr[-4:]) & 0xF) == 0b1011, f"Expected addr 0b1011, got {(int(dut.uio_out.value.binstr[-4:]) & 0xF)}"
+    assert (int(dut.uio_out.value.binstr[-4:], 2) & 0xF) == 0b1011, f"Expected addr 0b1011, got {(int(dut.uio_out.value.binstr[-4:], 2) & 0xF)}"
 
     # Finish simulation
     dut._log.info("Finishing simulation")
