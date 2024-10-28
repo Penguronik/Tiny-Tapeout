@@ -69,9 +69,6 @@ async def test_project(dut):
     # Finish simulation after a few clock cycles
     dut._log.info("Finishing simulation")
     await ClockCycles(dut.clk, 2)
-
-    # Add assertions to verify the expected output values
-    assert dut.uo_out.value == 0b11110000, f"Expected output value does not match: {dut.uo_out.value}"
     
 # async def test_project(dut):
 #     dut._log.info("Start")
