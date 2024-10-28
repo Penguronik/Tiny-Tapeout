@@ -43,18 +43,18 @@ async def instruction_register_test(dut):
     dut._log.info("Loading value into instruction register")
     dut.uio_in.value = 0b0100
     dut.uio_in.value |= 0b1000
-    dut.bus.value = 0b11001010
+    dut.ui_in.value = 0b11001010
     await FallingEdge(dut.clk)
     dut.uio_in.value = 0b0110
     dut.uio_in.value &= 0b0111
     await FallingEdge(dut.clk)
-    assert dut.opcode.value == 0b1100, f"Expected opcode 0b1100, got {dut.opcode.value}"
+    assert (int(dut.uio_out.value.binstr[-4:], 2) & 0xF) == 0b1100, f"Expected opcode 0b1100, got {(int(dut.uio_out.value.binstr[-4:], 2) & 0xF)}"
 
     # 3. Enable lower 4 bits onto the bus
     dut._log.info("Enabling lower 4 bits onto the bus")
     dut.uio_in.value = 0b0010
     await FallingEdge(dut.clk)
-    assert dut.bus.value & 0xF == 0b1010, f"Expected bus lower 4 bits 0b1010, got {dut.bus.value & 0xF}"
+    assert dut.uo_out.value & 0xF == 0b1010, f"Expected bus lower 4 bits 0b1010, got {dut.uo_out.value & 0xF}"
     dut.uio_in.value = 0b0110
     await FallingEdge(dut.clk)
 
@@ -63,7 +63,7 @@ async def instruction_register_test(dut):
     # 4. Load a new value onto the bus
     dut._log.info("Loading new value onto the bus")
     dut.uio_in.value |= 0b1000
-    dut.bus.value = 0b01100011
+    dut.ui_in.value = 0b01100011
     dut.uio_in.value = 0b0100
     await FallingEdge(dut.clk)
     dut.uio_in.value = 0b0110
@@ -71,7 +71,7 @@ async def instruction_register_test(dut):
     await FallingEdge(dut.clk)
     dut.uio_in.value = 0b0010
     await FallingEdge(dut.clk)
-    assert dut.bus.value & 0xF == 0b0011, f"Expected bus lower 4 bits 0b0011, got {dut.bus.value & 0xF}"
+    assert dut.uo_out.value & 0xF == 0b0011, f"Expected bus lower 4 bits 0b0011, got {dut.uo_out.value & 0xF}"
     dut.uio_in.value = 0b0110
     await FallingEdge(dut.clk)
 
@@ -81,12 +81,12 @@ async def instruction_register_test(dut):
     await FallingEdge(dut.clk)
     dut.uio_in.value = 0b0100
     dut.uio_in.value |= 0b1000
-    dut.bus.value = 0b10000001
+    dut.ui_in.value = 0b10000001
     await FallingEdge(dut.clk)
     dut.uio_in.value = 0b0010
     dut.uio_in.value &= 0b0111
     await FallingEdge(dut.clk)
-    assert dut.bus.value & 0xF == 0b0001, f"Expected bus lower 4 bits 0b0001, got {dut.bus.value & 0xF}"
+    assert dut.uo_out.value & 0xF == 0b0001, f"Expected bus lower 4 bits 0b0001, got {dut.uo_out.value & 0xF}"
     dut.uio_in.value = 0b0110
     await FallingEdge(dut.clk)
 
@@ -94,7 +94,7 @@ async def instruction_register_test(dut):
     dut._log.info("Checking undefined case behavior")
     dut.uio_in.value = 0b0000
     dut.uio_in.value |= 0b1000
-    dut.bus.value = 0b00100100
+    dut.ui_in.value = 0b00100100
     await Timer(20, units="ns")
     dut.uio_in.value = 0b0110
     dut.uio_in.value &= 0b0111
