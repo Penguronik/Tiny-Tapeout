@@ -29,32 +29,32 @@ module tt_um_example (
     // // Register Test End
 
     
-    // Input and MAR Register Start
-    input_mar_register im_register( .clk(clk), .n_load_data(uio_in [0]), .n_load_addr(uio_in [1]), .bus(ui_in), .data(uo_out), .addr(uio_out[3:0]) );
-    
-    // All output pins must be assigned. If not used, assign to 0.
-    assign uio_oe = 0;
-    assign uio_out[7:4] = 0;
-    
-    // List all unused inputs to prevent warnings
-    wire _unused = &{ena, rst_n, uio_in[7:2], 1'b0};
-    // Input and MAR Register End
-
-    
-    // // Instruction Register Start
-    // wire [7:0] bus;
-    
-    // instruction_register instr_register( .clk(clk), .clear(uio_in [0]), .n_load(uio_in [1]), .n_enable(uio_in [2]), .bus(bus), .opcode(uio_out[3:0]) );
-    
-    // assign bus = (uio_in[3] == 8'b00000001) ? ui_in : 8'bz; // Input path
-    // assign uo_out = bus;                                    // Output path
-    // // assign uio_oe = {8{!ui_in[1]}};                       // Enable path based on n_enable
+    // // Input and MAR Register Start
+    // input_mar_register im_register( .clk(clk), .n_load_data(uio_in [0]), .n_load_addr(uio_in [1]), .bus(ui_in), .data(uo_out), .addr(uio_out[3:0]) );
     
     // // All output pins must be assigned. If not used, assign to 0.
-    // assign uio_oe  = 0;
+    // assign uio_oe = 0;
+    // assign uio_out[7:4] = 0;
     
     // // List all unused inputs to prevent warnings
-    // wire _unused = &{ena, rst_n, 1'b0};
-    // // Instruction Register End
+    // wire _unused = &{ena, rst_n, uio_in[7:2], 1'b0};
+    // // Input and MAR Register End
+
+    
+    // Instruction Register Start
+    wire [7:0] bus;
+    
+    instruction_register instr_register( .clk(clk), .clear(uio_in [0]), .n_load(uio_in [1]), .n_enable(uio_in [2]), .bus(bus), .opcode(uio_out[3:0]) );
+    
+    assign bus = (uio_in[3] == 8'b00000001) ? ui_in : 8'bz; // Input path
+    assign uo_out = bus;                                    // Output path
+    // assign uio_oe = {8{!ui_in[1]}};                       // Enable path based on n_enable
+    
+    // All output pins must be assigned. If not used, assign to 0.
+    assign uio_oe  = 0;
+    
+    // List all unused inputs to prevent warnings
+    wire _unused = &{ena, rst_n, 1'b0};
+    // Instruction Register End
     
 endmodule
