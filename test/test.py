@@ -26,14 +26,17 @@ async def input_mar_register_test(dut):
     await FallingEdge(dut.clk)
     dut.rst_n.value = 1
 
+    dut.uo_out.value = 0
+    dut.uio_out.value = 0
+
     dut._log.info("Test project behavior")
     dut._log.info("Start Register Test")
 
     # 1. Apply a value to bus, with both load signals disabled (no load)
     dut._log.info("Check no load when both load signals are high")
-    dut.ui_in.value = 0b10101010
     dut.uio_in.value[0] = 1
     dut.uio_in.value[1] = 1
+    dut.ui_in.value = 0b10101010
     await FallingEdge(dut.clk)
     dut.ui_in.value = 0b10011011
     await FallingEdge(dut.clk)
