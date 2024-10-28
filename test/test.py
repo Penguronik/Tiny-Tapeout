@@ -31,6 +31,7 @@ async def input_mar_register_test(dut):
 
     # 2. Load data into the data register (n_load_data active)
     dut._log.info("Loading data into data register")
+    dut.ui_in.value = 0b10011011
     dut.uio_in.value = 0b10
     await FallingEdge(dut.clk)
     dut.uio_in.value = 0b11
