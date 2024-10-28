@@ -14,7 +14,7 @@ async def test_project(dut):
     clock = Clock(dut.clk, 10, units="us")
     cocotb.start_soon(clock.start())
 
-    await Timer(5, units='ns') # do stuff on the falling edge
+    await Timer(5, units='us') # do stuff on the falling edge
 
     # Reset
     dut._log.info("Reset")
