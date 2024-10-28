@@ -11,166 +11,166 @@ import cocotb
 from cocotb.triggers import RisingEdge, FallingEdge, Timer
 from cocotb.clock import Clock
 
-@cocotb.test()
-async def instruction_register_test(dut):
-    dut._log.info("Starting instruction register test")
-
-    # Set the clock period to 10 ns (100 MHz)
-    clock = Clock(dut.clk, 10, units="ns")
-    cocotb.start_soon(clock.start())
-
-    await FallingEdge(dut.clk)
-
-    # Reset
-    dut._log.info("Applying reset")
-    dut.clear.value = 0
-    dut.n_load.value = 1
-    dut.n_enable.value = 1
-    dut.bus.value = 0
-    dut.rst_n.value = 0
-    await FallingEdge(dut.clk)
-    dut.rst_n.value = 1
-    await FallingEdge(dut.clk)
-
-    # Test sequence
-
-    # 1. Clear instruction register
-    dut._log.info("Clearing instruction register")
-    dut.clear.value = 1
-    await FallingEdge(dut.clk)
-    dut.clear.value = 0
-    await FallingEdge(dut.clk)
-
-    # 2. Load a value into the instruction register (bus = 0b11001010)
-    dut._log.info("Loading value into instruction register")
-    dut.n_load.value = 0
-    dut.bus.value = 0b11001010
-    await FallingEdge(dut.clk)
-    dut.n_load.value = 1
-    await FallingEdge(dut.clk)
-    assert dut.opcode.value == 0b1100, f"Expected opcode 0b1100, got {dut.opcode.value}"
-
-    # 3. Enable lower 4 bits onto the bus
-    dut._log.info("Enabling lower 4 bits onto the bus")
-    dut.n_enable.value = 0
-    await FallingEdge(dut.clk)
-    assert dut.bus.value & 0xF == 0b1010, f"Expected bus lower 4 bits 0b1010, got {dut.bus.value & 0xF}"
-    dut.n_enable.value = 1
-    await FallingEdge(dut.clk)
-
-    # Additional Test Cases
-
-    # 4. Load a new value onto the bus
-    dut._log.info("Loading new value onto the bus")
-    dut.bus.value = 0b01100011
-    dut.n_load.value = 0
-    await FallingEdge(dut.clk)
-    dut.n_load.value = 1
-    await FallingEdge(dut.clk)
-    dut.n_enable.value = 0
-    await FallingEdge(dut.clk)
-    assert dut.bus.value & 0xF == 0b0011, f"Expected bus lower 4 bits 0b0011, got {dut.bus.value & 0xF}"
-    dut.n_enable.value = 1
-    await FallingEdge(dut.clk)
-
-    # 5. Enable and load in quick succession
-    dut._log.info("Enabling and loading in quick succession")
-    dut.n_enable.value = 0
-    await FallingEdge(dut.clk)
-    dut.n_enable.value = 1
-    dut.bus.value = 0b10000001
-    dut.n_load.value = 0
-    await FallingEdge(dut.clk)
-    dut.n_load.value = 1
-    dut.n_enable.value = 0
-    await FallingEdge(dut.clk)
-    assert dut.bus.value & 0xF == 0b0001, f"Expected bus lower 4 bits 0b0001, got {dut.bus.value & 0xF}"
-    dut.n_enable.value = 1
-    await FallingEdge(dut.clk)
-
-    # 6. Check undefined case behavior
-    dut._log.info("Checking undefined case behavior")
-    dut.bus.value = 0b00100100
-    dut.n_enable.value = 0
-    dut.n_load.value = 0
-    await Timer(20, units="ns")
-    dut.n_enable.value = 1
-    dut.n_load.value = 1
-    await FallingEdge(dut.clk)
-
-    # 7. Clear instruction register again
-    dut._log.info("Clearing instruction register again")
-    dut.clear.value = 1
-    await FallingEdge(dut.clk)
-    dut.clear.value = 0
-
-    # Finish simulation
-    dut._log.info("Finishing simulation")
-    await FallingEdge(dut.clk)
-    await FallingEdge(dut.clk)
-
 # @cocotb.test()
-# async def input_mar_register_test(dut):
-#     dut._log.info("Start")
+# async def instruction_register_test(dut):
+#     dut._log.info("Starting instruction register test")
 
-#     # Set the clock period to 10 us (100 KHz)
-#     clock = Clock(dut.clk, 10, units="us")
+#     # Set the clock period to 10 ns (100 MHz)
+#     clock = Clock(dut.clk, 10, units="ns")
 #     cocotb.start_soon(clock.start())
 
-#     await FallingEdge(dut.clk) # do stuff on the falling edge
+#     await FallingEdge(dut.clk)
 
 #     # Reset
-#     dut._log.info("Reset")
-#     dut.ena.value = 1
-#     dut.ui_in.value = 0
-#     dut.uio_in.value = 0
+#     dut._log.info("Applying reset")
+#     dut.clear.value = 0
+#     dut.n_load.value = 1
+#     dut.n_enable.value = 1
+#     dut.bus.value = 0
 #     dut.rst_n.value = 0
 #     await FallingEdge(dut.clk)
 #     dut.rst_n.value = 1
+#     await FallingEdge(dut.clk)
 
-#     dut._log.info("Test project behavior")
-#     dut._log.info("Start Register Test")
+#     # Test sequence
 
-#     # 2. Load data into the data register (n_load_data active)
-#     dut._log.info("Loading data into data register")
-#     dut.ui_in.value = 0b10011011
-#     dut.uio_in.value = 0b10
+#     # 1. Clear instruction register
+#     dut._log.info("Clearing instruction register")
+#     dut.clear.value = 1
 #     await FallingEdge(dut.clk)
-#     dut.uio_in.value = 0b11
+#     dut.clear.value = 0
 #     await FallingEdge(dut.clk)
-#     assert dut.uo_out.value == 0b10011011, f"Expected data 0b10011011, got {dut.uo_out.value}"
 
-#     # 3. Load address into the addr register (n_load_addr active)
-#     dut._log.info("Loading address into addr register")
-#     dut.ui_in.value = 0b01010110
-#     dut.uio_in.value = 0b01
+#     # 2. Load a value into the instruction register (bus = 0b11001010)
+#     dut._log.info("Loading value into instruction register")
+#     dut.n_load.value = 0
+#     dut.bus.value = 0b11001010
 #     await FallingEdge(dut.clk)
-#     dut.uio_in.value = 0b11
+#     dut.n_load.value = 1
 #     await FallingEdge(dut.clk)
-#     assert (int(dut.uio_out.value.binstr[-4:], 2) & 0xF) == 0b0110, f"Expected addr 0b0110, got {(int(dut.uio_out.value.binstr[-4:], 2) & 0xF)}"
+#     assert dut.opcode.value == 0b1100, f"Expected opcode 0b1100, got {dut.opcode.value}"
 
-#     # 4. Change bus, verify no load when load signals are high
-#     dut._log.info("Change bus, verify no load with high load signals")
-#     dut.ui_in.value = 0b11001001
+#     # 3. Enable lower 4 bits onto the bus
+#     dut._log.info("Enabling lower 4 bits onto the bus")
+#     dut.n_enable.value = 0
 #     await FallingEdge(dut.clk)
-#     dut.ui_in.value = 0b11101011
+#     assert dut.bus.value & 0xF == 0b1010, f"Expected bus lower 4 bits 0b1010, got {dut.bus.value & 0xF}"
+#     dut.n_enable.value = 1
 #     await FallingEdge(dut.clk)
-#     assert dut.uo_out.value == 0b10011011, f"Data should remain 0b10011011, got {dut.uo_out.value}"
-#     assert (int(dut.uio_out.value.binstr[-4:], 2) & 0xF) == 0b0110, f"Addr should remain 0b0110, got {(int(dut.uio_out.value.binstr[-4:], 2) & 0xF)}"
 
-#     # 5. Load both data and addr at the same time
-#     dut._log.info("Loading both data and addr simultaneously")
-#     dut.uio_in.value = 0b00
+#     # Additional Test Cases
+
+#     # 4. Load a new value onto the bus
+#     dut._log.info("Loading new value onto the bus")
+#     dut.bus.value = 0b01100011
+#     dut.n_load.value = 0
 #     await FallingEdge(dut.clk)
-#     dut.uio_in.value = 0b11
+#     dut.n_load.value = 1
 #     await FallingEdge(dut.clk)
-#     assert dut.uo_out.value == 0b11101011, f"Expected data 0b11110000, got {dut.uo_out.value}"
-#     assert (int(dut.uio_out.value.binstr[-4:], 2) & 0xF) == 0b1011, f"Expected addr 0b1011, got {(int(dut.uio_out.value.binstr[-4:], 2) & 0xF)}"
+#     dut.n_enable.value = 0
+#     await FallingEdge(dut.clk)
+#     assert dut.bus.value & 0xF == 0b0011, f"Expected bus lower 4 bits 0b0011, got {dut.bus.value & 0xF}"
+#     dut.n_enable.value = 1
+#     await FallingEdge(dut.clk)
+
+#     # 5. Enable and load in quick succession
+#     dut._log.info("Enabling and loading in quick succession")
+#     dut.n_enable.value = 0
+#     await FallingEdge(dut.clk)
+#     dut.n_enable.value = 1
+#     dut.bus.value = 0b10000001
+#     dut.n_load.value = 0
+#     await FallingEdge(dut.clk)
+#     dut.n_load.value = 1
+#     dut.n_enable.value = 0
+#     await FallingEdge(dut.clk)
+#     assert dut.bus.value & 0xF == 0b0001, f"Expected bus lower 4 bits 0b0001, got {dut.bus.value & 0xF}"
+#     dut.n_enable.value = 1
+#     await FallingEdge(dut.clk)
+
+#     # 6. Check undefined case behavior
+#     dut._log.info("Checking undefined case behavior")
+#     dut.bus.value = 0b00100100
+#     dut.n_enable.value = 0
+#     dut.n_load.value = 0
+#     await Timer(20, units="ns")
+#     dut.n_enable.value = 1
+#     dut.n_load.value = 1
+#     await FallingEdge(dut.clk)
+
+#     # 7. Clear instruction register again
+#     dut._log.info("Clearing instruction register again")
+#     dut.clear.value = 1
+#     await FallingEdge(dut.clk)
+#     dut.clear.value = 0
 
 #     # Finish simulation
 #     dut._log.info("Finishing simulation")
 #     await FallingEdge(dut.clk)
 #     await FallingEdge(dut.clk)
+
+@cocotb.test()
+async def input_mar_register_test(dut):
+    dut._log.info("Start")
+
+    # Set the clock period to 10 us (100 KHz)
+    clock = Clock(dut.clk, 10, units="us")
+    cocotb.start_soon(clock.start())
+
+    await FallingEdge(dut.clk) # do stuff on the falling edge
+
+    # Reset
+    dut._log.info("Reset")
+    dut.ena.value = 1
+    dut.ui_in.value = 0
+    dut.uio_in.value = 0
+    dut.rst_n.value = 0
+    await FallingEdge(dut.clk)
+    dut.rst_n.value = 1
+
+    dut._log.info("Test project behavior")
+    dut._log.info("Start Register Test")
+
+    # 2. Load data into the data register (n_load_data active)
+    dut._log.info("Loading data into data register")
+    dut.ui_in.value = 0b10011011
+    dut.uio_in.value = 0b10
+    await FallingEdge(dut.clk)
+    dut.uio_in.value = 0b11
+    await FallingEdge(dut.clk)
+    assert dut.uo_out.value == 0b10011011, f"Expected data 0b10011011, got {dut.uo_out.value}"
+
+    # 3. Load address into the addr register (n_load_addr active)
+    dut._log.info("Loading address into addr register")
+    dut.ui_in.value = 0b01010110
+    dut.uio_in.value = 0b01
+    await FallingEdge(dut.clk)
+    dut.uio_in.value = 0b11
+    await FallingEdge(dut.clk)
+    assert (int(dut.uio_out.value.binstr[-4:], 2) & 0xF) == 0b0110, f"Expected addr 0b0110, got {(int(dut.uio_out.value.binstr[-4:], 2) & 0xF)}"
+
+    # 4. Change bus, verify no load when load signals are high
+    dut._log.info("Change bus, verify no load with high load signals")
+    dut.ui_in.value = 0b11001001
+    await FallingEdge(dut.clk)
+    dut.ui_in.value = 0b11101011
+    await FallingEdge(dut.clk)
+    assert dut.uo_out.value == 0b10011011, f"Data should remain 0b10011011, got {dut.uo_out.value}"
+    assert (int(dut.uio_out.value.binstr[-4:], 2) & 0xF) == 0b0110, f"Addr should remain 0b0110, got {(int(dut.uio_out.value.binstr[-4:], 2) & 0xF)}"
+
+    # 5. Load both data and addr at the same time
+    dut._log.info("Loading both data and addr simultaneously")
+    dut.uio_in.value = 0b00
+    await FallingEdge(dut.clk)
+    dut.uio_in.value = 0b11
+    await FallingEdge(dut.clk)
+    assert dut.uo_out.value == 0b11101011, f"Expected data 0b11110000, got {dut.uo_out.value}"
+    assert (int(dut.uio_out.value.binstr[-4:], 2) & 0xF) == 0b1011, f"Expected addr 0b1011, got {(int(dut.uio_out.value.binstr[-4:], 2) & 0xF)}"
+
+    # Finish simulation
+    dut._log.info("Finishing simulation")
+    await FallingEdge(dut.clk)
+    await FallingEdge(dut.clk)
 
 # # Simple Register Test
 # @cocotb.test()
