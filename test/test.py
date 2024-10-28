@@ -15,59 +15,69 @@ async def input_mar_register_test(dut):
     clock = Clock(dut.clk, 10, units="us")
     cocotb.start_soon(clock.start())
 
-    await FallingEdge(dut.clk)
+    await FallingEdge(dut.clk) # do stuff on the falling edge
 
-    # Test sequence
+    # Reset
+    dut._log.info("Reset")
+    dut.ena.value = 1
+    dut.ui_in.value = 0
+    dut.uio_in.value = 0
+    dut.rst_n.value = 0
+    await FallingEdge(dut.clk)
+    dut.rst_n.value = 1
+
+    dut._log.info("Test project behavior")
+    dut._log.info("Start Register Test")
 
     # 1. Apply a value to bus, with both load signals disabled (no load)
     dut._log.info("Check no load when both load signals are high")
-    dut.bus.value = 0b10101010
-    dut.n_load_data.value = 1
-    dut.n_load_addr.value = 1
+    dut.ui_in.value = 0b10101010
+    dut.uio_in[0].value = 1
+    dut.uio_in[1].value = 1
     await FallingEdge(dut.clk)
-    dut.bus.value = 0b10011011
+    dut.ui_in.value = 0b10011011
     await FallingEdge(dut.clk)
-    assert dut.data.value == 0, f"Data should remain unchanged, got {dut.data.value}"
-    assert dut.addr.value == 0, f"Addr should remain unchanged, got {dut.addr.value}"
+    assert dut.uo_out.value == 0, f"Data should remain unchanged, got {dut.uo_out.value}"
+    assert dut.uio_out[3:0].value == 0, f"Addr should remain unchanged, got {dut.uio_out[3:0].value}"
 
     # 2. Load data into the data register (n_load_data active)
     dut._log.info("Loading data into data register")
-    dut.bus.value = 0b10101010
-    dut.n_load_data.value = 0
+    dut.ui_in.value = 0b10101010
+    dut.uio_in[0].value = 0
     await FallingEdge(dut.clk)
-    dut.n_load_data.value = 1
+    dut.uio_in[0].value = 1
     await FallingEdge(dut.clk)
-    assert dut.data.value == 0b10101010, f"Expected data 0b10101010, got {dut.data.value}"
+    assert dut.uo_out.value == 0b10101010, f"Expected data 0b10101010, got {dut.uo_out.value}"
 
     # 3. Load address into the addr register (n_load_addr active)
     dut._log.info("Loading address into addr register")
-    dut.bus.value = 0b01010110
-    dut.n_load_addr.value = 0
+    dut.ui_in.value = 0b01010110
+    dut.uio_in[1].value = 0
     await FallingEdge(dut.clk)
-    dut.n_load_addr.value = 1
+    dut.uio_in[1].value = 1
     await FallingEdge(dut.clk)
-    assert dut.addr.value == 0b0101, f"Expected addr 0b0101, got {dut.addr.value}"
+    assert dut.uio_out[3:0].value == 0b0101, f"Expected addr 0b0101, got {dut.uio_out[3:0].value}"
 
     # 4. Change bus, verify no load when load signals are high
     dut._log.info("Change bus, verify no load with high load signals")
-    dut.bus.value = 0b11001001
+    dut.ui_in.value = 0b11001001
     await FallingEdge(dut.clk)
-    dut.bus.value = 0b11101011
+    dut.ui_in.value = 0b11101011
     await FallingEdge(dut.clk)
-    assert dut.data.value == 0b10101010, f"Data should remain 0b10101010, got {dut.data.value}"
-    assert dut.addr.value == 0b0101, f"Addr should remain 0b0101, got {dut.addr.value}"
+    assert dut.uo_out.value == 0b10101010, f"Data should remain 0b10101010, got {dut.uo_out.value}"
+    assert dut.uio_out[3:0].value == 0b0101, f"Addr should remain 0b0101, got {dut.uio_out[3:0].value}"
 
     # 5. Load both data and addr at the same time
     dut._log.info("Loading both data and addr simultaneously")
-    dut.bus.value = 0b11110000
-    dut.n_load_data.value = 0
-    dut.n_load_addr.value = 0
+    dut.ui_in.value = 0b11110000
+    dut.uio_in[0].value = 0
+    dut.uio_in[1].value = 0
     await FallingEdge(dut.clk)
-    dut.n_load_data.value = 1
-    dut.n_load_addr.value = 1
+    dut.uio_in[0].value = 1
+    dut.uio_in[1].value = 1
     await FallingEdge(dut.clk)
-    assert dut.data.value == 0b11110000, f"Expected data 0b11110000, got {dut.data.value}"
-    assert dut.addr.value == 0b1111, f"Expected addr 0b1111, got {dut.addr.value}"
+    assert dut.uo_out.value == 0b11110000, f"Expected data 0b11110000, got {dut.uo_out.value}"
+    assert dut.uio_out[3:0].value == 0b1111, f"Expected addr 0b1111, got {dut.uio_out[3:0].value}"
 
     # Finish simulation
     dut._log.info("Finishing simulation")
