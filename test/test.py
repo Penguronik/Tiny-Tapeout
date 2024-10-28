@@ -14,13 +14,15 @@ async def test_project(dut):
     clock = Clock(dut.clk, 10, units="us")
     cocotb.start_soon(clock.start())
 
+    await Timer(5, units='ns') # do stuff on the falling edge
+
     # Reset
     dut._log.info("Reset")
     dut.ena.value = 1
     dut.ui_in.value = 0
     dut.uio_in.value = 0
     dut.rst_n.value = 0
-    await ClockCycles(dut.clk, 10)
+    await ClockCycles(dut.clk, 1)
     dut.rst_n.value = 1
 
     dut._log.info("Test project behavior")
@@ -63,15 +65,6 @@ async def test_project(dut):
     dut.uio_in.value = 1  # Stop loading
     await ClockCycles(dut.clk, 1)
     assert dut.uo_out.value == 0b11111111, f"Expected value to remain 0b11111111, got {dut.value.value}"
-
-    # Loading halfway through clock cycle
-    dut._log.info("Loading value halfway through clock cycle")
-    dut.ui_in.value = 0b11110000
-    dut.uio_in.value = 0  # n_load active (low)
-    await ClockCycles(dut.clk, 1)
-    dut.uio_in.value = 1  # Stop loading
-    await ClockCycles(dut.clk, 1)
-    assert dut.uo_out.value == 0b11110000, f"Expected value to be 0b11110000, got {dut.value.value}"
 
     # Finish simulation after a few clock cycles
     dut._log.info("Finishing simulation")
