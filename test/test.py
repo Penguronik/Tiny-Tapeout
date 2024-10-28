@@ -41,12 +41,10 @@ async def instruction_register_test(dut):
 
     # 2. Load a value into the instruction register (bus = 0b11001010)
     dut._log.info("Loading value into instruction register")
-    dut.uio_in.value = 0b0100
-    dut.uio_in.value |= 0b1000
+    dut.uio_in.value = 0b1100
     dut.ui_in.value = 0b11001010
     await FallingEdge(dut.clk)
     dut.uio_in.value = 0b0110
-    dut.uio_in.value &= 0b0111
     await FallingEdge(dut.clk)
     assert (int(dut.uio_out.value.binstr[-4:], 2) & 0xF) == 0b1100, f"Expected opcode 0b1100, got {(int(dut.uio_out.value.binstr[-4:], 2) & 0xF)}"
 
@@ -62,12 +60,10 @@ async def instruction_register_test(dut):
 
     # 4. Load a new value onto the bus
     dut._log.info("Loading new value onto the bus")
-    dut.uio_in.value |= 0b1000
     dut.ui_in.value = 0b01100011
-    dut.uio_in.value = 0b0100
+    dut.uio_in.value = 0b1100
     await FallingEdge(dut.clk)
     dut.uio_in.value = 0b0110
-    dut.uio_in.value &= 0b0111
     await FallingEdge(dut.clk)
     dut.uio_in.value = 0b0010
     await FallingEdge(dut.clk)
@@ -79,12 +75,10 @@ async def instruction_register_test(dut):
     dut._log.info("Enabling and loading in quick succession")
     dut.uio_in.value = 0b0010
     await FallingEdge(dut.clk)
-    dut.uio_in.value = 0b0100
-    dut.uio_in.value |= 0b1000
+    dut.uio_in.value = 0b1100
     dut.ui_in.value = 0b10000001
     await FallingEdge(dut.clk)
     dut.uio_in.value = 0b0010
-    dut.uio_in.value &= 0b0111
     await FallingEdge(dut.clk)
     assert dut.uo_out.value & 0xF == 0b0001, f"Expected bus lower 4 bits 0b0001, got {dut.uo_out.value & 0xF}"
     dut.uio_in.value = 0b0110
@@ -92,12 +86,10 @@ async def instruction_register_test(dut):
 
     # 6. Check undefined case behavior
     dut._log.info("Checking undefined case behavior")
-    dut.uio_in.value = 0b0000
-    dut.uio_in.value |= 0b1000
+    dut.uio_in.value = 0b1000
     dut.ui_in.value = 0b00100100
     await Timer(20, units="ns")
     dut.uio_in.value = 0b0110
-    dut.uio_in.value &= 0b0111
     await FallingEdge(dut.clk)
 
     # 7. Clear instruction register again
