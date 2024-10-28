@@ -8,7 +8,7 @@ from cocotb.triggers import Timer
 from cocotb.triggers import FallingEdge
 
 @cocotb.test()
-async def input_and_mar_register_test(dut):
+async def input_mar_register_test(dut):
     dut._log.info("Start")
 
     # Set the clock period to 10 us (100 KHz)
