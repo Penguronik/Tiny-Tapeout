@@ -9,8 +9,4 @@ You can also include images in this folder and reference them in the markdown. E
 
 ## Design Specifications
 
-<object data="http://yoursite.com/the.pdf" type="application/pdf" width="700px" height="700px">
-    <embed src="http://yoursite.com/the.pdf">
-        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="http://yoursite.com/the.pdf">Download PDF</a>.</p>
-    </embed>
-</object>
+<iframe src="Design Proposal.pdf" width="100%" height="600px"></iframe>
