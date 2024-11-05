@@ -9,4 +9,4 @@ You can also include images in this folder and reference them in the markdown. E
 
 ## Design Specifications
 
-<iframe src="Design Proposal.pdf" width="100%" height="600px"></iframe>
+<iframe src="https://mozilla.github.io/pdf.js/web/viewer.html?file=path/to/yourfile.pdf" width="100%" height="600px"></iframe>
