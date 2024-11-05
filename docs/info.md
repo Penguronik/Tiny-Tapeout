@@ -9,4 +9,8 @@ You can also include images in this folder and reference them in the markdown. E
 
 ## Design Specifications
 
-https://docs.google.com/document/d/1UqJ-6-2SvgXeD9cuJA61VA4_T9UJNBi92vLUT9pjhN0/edit?usp=sharing
+<object data="http://yoursite.com/the.pdf" type="application/pdf" width="700px" height="700px">
+    <embed src="http://yoursite.com/the.pdf">
+        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="http://yoursite.com/the.pdf">Download PDF</a>.</p>
+    </embed>
+</object>
