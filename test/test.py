@@ -12,8 +12,8 @@ from cocotb.triggers import RisingEdge, FallingEdge, Timer
 from cocotb.clock import Clock
 
 @cocotb.test()
-async def total_test(dut):
-    dut._log.info("Starting total test (all registers)")
+async def register_test(dut):
+    dut._log.info("Starting basic register test")
 
     # Selecting basic register
     dut.uio_in.value = 0b00000000
@@ -82,12 +82,16 @@ async def total_test(dut):
     await FallingEdge(dut.clk)
 
 
-    
+@cocotb.test()
+async def input_mar_register_test(dut):
     dut._log.info("Start Input and MAR Test")
 
     # Selecting input and mar register
     dut.uio_in.value = 0b01000000
-    
+
+    # Set the clock period to 10 us (100 KHz)
+    clock = Clock(dut.clk, 10, units="us")
+    cocotb.start_soon(clock.start())
     await FallingEdge(dut.clk) # do stuff on the falling edge
 
     # Reset
@@ -143,13 +147,17 @@ async def total_test(dut):
     await FallingEdge(dut.clk)
     await FallingEdge(dut.clk)
 
-    
 
+@cocotb.test()
+async def instruction_register_test(dut):
     dut._log.info("Starting instruction register test")
 
     # Selecting instruction register
     dut.uio_in.value = 0b10000000
-    
+
+    # Set the clock period to 10 us (100 KHz)
+    clock = Clock(dut.clk, 10, units="us")
+    cocotb.start_soon(clock.start())
     await FallingEdge(dut.clk) # do stuff on the falling edge
     # TODO: Do we need a await Falling Edge at the start of every single test?
 
