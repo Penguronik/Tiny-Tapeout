@@ -15,6 +15,9 @@ from cocotb.clock import Clock
 async def total_test(dut):
     dut._log.info("Starting total test (all registers)")
 
+    # Selecting basic register
+    uio_in[7:6] = 0b00
+
     # Set the clock period to 10 us (100 KHz)
     clock = Clock(dut.clk, 10, units="us")
     cocotb.start_soon(clock.start())
@@ -81,6 +84,10 @@ async def total_test(dut):
 
     
     dut._log.info("Start Input and MAR Test")
+
+    # Selecting input and mar register
+    uio_in[7:6] = 0b01
+    
     await FallingEdge(dut.clk) # do stuff on the falling edge
 
     # Reset
@@ -139,7 +146,11 @@ async def total_test(dut):
     
 
     dut._log.info("Starting instruction register test")
-    await FallingEdge(dut.clk) await FallingEdge(dut.clk) # do stuff on the falling edge
+
+    # Selecting instruction register
+    uio_in[7:6] = 0b10
+    
+    await FallingEdge(dut.clk) # do stuff on the falling edge
     # TODO: Do we need a await Falling Edge at the start of every single test?
 
     # Reset
