@@ -50,7 +50,7 @@ module tt_um_ronikant_jeremykam_tinyregisters (
     // Instruction Register Start
     wire [7:0] bus;
     instruction_register instr_register( .clk(clk), .clear(rst_n), .n_load(uio_in [4] | decoder_out_n[2]), .n_enable(uio_in [5] | decoder_out_n[2]), .bus(bus), .opcode(IR_opcode_out) );
-    assign bus = ((uio_in [5] | decoder_out_n[2]) == 0) ? ui_in : 8'bz;           // Input path
+    assign bus = ((uio_in [5] | decoder_out_n[2]) == 0) ? 8'bz : ui_in;           // Input path
     assign IR_bus_out = bus;                                // Output path
 
     
