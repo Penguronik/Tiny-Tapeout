@@ -168,7 +168,7 @@ async def instruction_register_test(dut):
     dut._log.info("Starting instruction register test")
 
     # Selecting instruction register
-    dut.uio_in.value = 0b10000110
+    dut.uio_in.value = 0b10110000
 
     # Set the clock period to 10 us (100 KHz)
     clock = Clock(dut.clk, 10, units="us")
@@ -188,26 +188,38 @@ async def instruction_register_test(dut):
 
     # 1. Clear instruction register
     dut._log.info("Clearing instruction register")
-    dut.uio_in.value = 0b0111
+    # dut.uio_in.value = 0b0111
+    dut.uio_in.value = 0b10110000
+
+    dut.rst_n.value = 1
     await FallingEdge(dut.clk)
-    dut.uio_in.value = 0b0110
+    # dut.uio_in.value = 0b0110
+    dut.uio_in.value = 0b10110000
+
+    dut.rst_n.value = 0
     await FallingEdge(dut.clk)
 
     # 2. Load a value into the instruction register (bus = 0b11001010)
     dut._log.info("Loading value into instruction register")
-    dut.uio_in.value = 0b1100
+    # dut.uio_in.value = 0b1100
+    dut.uio_in.value = 0b10100000
+    
     dut.ui_in.value = 0b11001010
     await FallingEdge(dut.clk)
-    dut.uio_in.value = 0b0110
+    # dut.uio_in.value = 0b0110
+    dut.uio_in.value = 0b10110000
+    
     await FallingEdge(dut.clk)
     assert (int(dut.uio_out.value.binstr[4:8], 2) & 0xF) == 0b1100, f"Expected opcode 0b1100, got {(int(dut.uio_out.value.binstr[4:8], 2) & 0xF)}"
 
     # 3. Enable lower 4 bits onto the bus
     dut._log.info("Enabling lower 4 bits onto the bus")
-    dut.uio_in.value = 0b0010
+    # dut.uio_in.value = 0b0010
+    dut.uio_in.value = 0b10010000
     await FallingEdge(dut.clk)
     assert (int(dut.uo_out.value.binstr[-4:], 2) & 0xF) == 0b1010, f"Expected bus lower 4 bits 0b1010, got {(int(dut.uo_out.value.binstr[-4:], 2) & 0xF)}"
-    dut.uio_in.value = 0b0110
+    # dut.uio_in.value = 0b0110
+    dut.uio_in.value = 0b10110000
     await FallingEdge(dut.clk)
 
     # Additional Test Cases
@@ -215,34 +227,48 @@ async def instruction_register_test(dut):
     # 4. Load a new value onto the bus
     dut._log.info("Loading new value onto the bus")
     dut.ui_in.value = 0b01100011
-    dut.uio_in.value = 0b1100
+    # dut.uio_in.value = 0b1100
+    dut.uio_in.value = 0b10100000
     await FallingEdge(dut.clk)
-    dut.uio_in.value = 0b0110
+    # dut.uio_in.value = 0b0110
+    dut.uio_in.value = 0b10110000
     await FallingEdge(dut.clk)
-    dut.uio_in.value = 0b0010
+    # dut.uio_in.value = 0b0010
+    dut.uio_in.value = 0b10010000
     await FallingEdge(dut.clk)
     assert (int(dut.uo_out.value.binstr[-4:], 2) & 0xF) == 0b0011, f"Expected bus lower 4 bits 0b0011, got {(int(dut.uo_out.value.binstr[-4:], 2) & 0xF)}"
-    dut.uio_in.value = 0b0110
+    # dut.uio_in.value = 0b0110
+    dut.uio_in.value = 0b10110000
     await FallingEdge(dut.clk)
 
     # 5. Enable and load in quick succession
     dut._log.info("Enabling and loading in quick succession")
-    dut.uio_in.value = 0b0010
+    # dut.uio_in.value = 0b0010
+    dut.uio_in.value = 0b10010000
     await FallingEdge(dut.clk)
-    dut.uio_in.value = 0b1100
+    # dut.uio_in.value = 0b1100
+    dut.uio_in.value = 0b10100000
     dut.ui_in.value = 0b10000001
     await FallingEdge(dut.clk)
-    dut.uio_in.value = 0b0010
+    # dut.uio_in.value = 0b0010
+    dut.uio_in.value = 0b10010000
     await FallingEdge(dut.clk)
     assert (int(dut.uo_out.value.binstr[-4:], 2) & 0xF) == 0b0001, f"Expected bus lower 4 bits 0b0001, got {(int(dut.uo_out.value.binstr[-4:], 2) & 0xF)}"
-    dut.uio_in.value = 0b0110
+    # dut.uio_in.value = 0b0110
+    dut.uio_in.value = 0b10110000
     await FallingEdge(dut.clk)
     
     # 6. Clear instruction register again
     dut._log.info("Clearing instruction register again")
-    dut.uio_in.value = 0b0111
+    # dut.uio_in.value = 0b0111
+    dut.uio_in.value = 0b10110000
+
+    dut.rst_n.value = 1
     await FallingEdge(dut.clk)
-    dut.uio_in.value = 0b0110
+    # dut.uio_in.value = 0b0110
+    dut.uio_in.value = 0b10110000
+
+    dut.rst_n.value = 0
     assert (int(dut.uio_out.value.binstr[4:8], 2) & 0xF) == 0b0000, f"Expected opcode 0b0000, got {(int(dut.uio_out.value.binstr[4:8], 2) & 0xF)}"
 
     # Finish simulation
