@@ -38,16 +38,16 @@ async def total_test(dut):
 
     # 1. Apply a value to bus, with n_load disabled (no load)
     dut.ui_in.value = 0b10101010
-    dut.uio_in.value = 1  # Keep n_load disabled
+    dut.uio_in.value = dut.uio_in.value | 0b00010000  # Keep n_load disabled
     await FallingEdge(dut.clk)
     await FallingEdge(dut.clk)
     assert dut.uo_out.value == 0, f"Expected output value does not match: {dut.uo_out.value}"
 
     # 2. Load a value into the register by asserting n_load (active low)
     dut._log.info("Loading value into the register")
-    dut.uio_in.value = 0  # n_load active (low)
+    dut.uio_in.value = dut.uio_in.value & 0b11101111  # n_load active (low)
     await FallingEdge(dut.clk)
-    dut.uio_in.value = 1  # Stop loading
+    dut.uio_in.value = dut.uio_in.value | 0b00010000  # Stop loading
     await FallingEdge(dut.clk)
     assert dut.uo_out.value == 0b10101010, f"Expected output value does not match: {dut.uo_out.value}"
 
@@ -62,17 +62,17 @@ async def total_test(dut):
 
     # 4. Load a new value into the register
     dut._log.info("Loading new value into the register")
-    dut.uio_in.value = 0  # n_load active (low)
+    dut.uio_in.value = dut.uio_in.value & 0b11101111  # n_load active (low)
     await FallingEdge(dut.clk)
-    dut.uio_in.value = 1  # Stop loading
+    dut.uio_in.value = dut.uio_in.value | 0b00010000  # Stop loading
     await FallingEdge(dut.clk)
     assert dut.uo_out.value == 0b11111111, f"Expected value to be 0b11111111, got {dut.value.value}"
 
     # 5. Load same value into the register
     dut._log.info("Loading same value into the register again")
-    dut.uio_in.value = 0  # n_load active (low)
+    dut.uio_in.value = dut.uio_in.value & 0b11101111  # n_load active (low)
     await FallingEdge(dut.clk)
-    dut.uio_in.value = 1  # Stop loading
+    dut.uio_in.value = dut.uio_in.value | 0b00010000  # Stop loading
     await FallingEdge(dut.clk)
     assert dut.uo_out.value == 0b11111111, f"Expected value to remain 0b11111111, got {dut.value.value}"
 
