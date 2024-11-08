@@ -16,7 +16,7 @@ async def total_test(dut):
     dut._log.info("Starting total test (all registers)")
 
     # Selecting basic register
-    uio_in[7:6] = 0b00
+    dut.uio_in.value = 0b00000000
 
     # Set the clock period to 10 us (100 KHz)
     clock = Clock(dut.clk, 10, units="us")
@@ -86,7 +86,7 @@ async def total_test(dut):
     dut._log.info("Start Input and MAR Test")
 
     # Selecting input and mar register
-    uio_in[7:6] = 0b01
+    dut.uio_in.value = 0b01000000
     
     await FallingEdge(dut.clk) # do stuff on the falling edge
 
@@ -148,7 +148,7 @@ async def total_test(dut):
     dut._log.info("Starting instruction register test")
 
     # Selecting instruction register
-    uio_in[7:6] = 0b10
+    dut.uio_in.value = 0b10000000
     
     await FallingEdge(dut.clk) # do stuff on the falling edge
     # TODO: Do we need a await Falling Edge at the start of every single test?
