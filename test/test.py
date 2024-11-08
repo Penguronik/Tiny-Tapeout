@@ -28,7 +28,6 @@ async def register_test(dut):
     dut._log.info("Reset")
     dut.ena.value = 1
     dut.ui_in.value = 0
-    dut.uio_in.value = 0
     dut.rst_n.value = 0
     await FallingEdge(dut.clk)
     dut.rst_n.value = 1
@@ -98,7 +97,6 @@ async def input_mar_register_test(dut):
     dut._log.info("Reset")
     dut.ena.value = 1
     dut.ui_in.value = 0
-    dut.uio_in.value = 0
     dut.rst_n.value = 0
     await FallingEdge(dut.clk)
     dut.rst_n.value = 1
@@ -165,7 +163,7 @@ async def instruction_register_test(dut):
     dut._log.info("Starting instruction register test")
 
     # Selecting instruction register
-    dut.uio_in.value = 0b10000000
+    dut.uio_in.value = 0b10000110
 
     # Set the clock period to 10 us (100 KHz)
     clock = Clock(dut.clk, 10, units="us")
@@ -175,7 +173,6 @@ async def instruction_register_test(dut):
 
     # Reset
     dut._log.info("Applying reset")
-    dut.uio_in.value = 0b0110
     dut.ui_in.value = 0
     dut.rst_n.value = 0
     await FallingEdge(dut.clk)
