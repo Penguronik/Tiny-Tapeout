@@ -210,7 +210,7 @@ async def instruction_register_test(dut):
     dut.uio_in.value = 0b10110000
     
     await FallingEdge(dut.clk)
-    assert (int(dut.uio_out.value.binstr[0:4], 2) & 0xF) == 0b1100, f"Expected opcode 0b1100, got {(int(dut.uio_out.value.binstr[0:4], 2) & 0xF)}"
+    assert (int(dut.uio_out.value.binstr[4:8], 2) & 0xF) == 0b1100, f"Expected opcode 0b1100, got {(int(dut.uio_out.value.binstr[4:8], 2) & 0xF)}"
 
     # 3. Enable lower 4 bits onto the bus
     dut._log.info("Enabling lower 4 bits onto the bus")
@@ -269,7 +269,7 @@ async def instruction_register_test(dut):
     dut.uio_in.value = 0b10110000
 
     dut.rst_n.value = 0
-    assert (int(dut.uio_out.value.binstr[0:4], 2) & 0xF) == 0b0000, f"Expected opcode 0b0000, got {(int(dut.uio_out.value.binstr[0:4], 2) & 0xF)}"
+    assert (int(dut.uio_out.value.binstr[4:8], 2) & 0xF) == 0b0000, f"Expected opcode 0b0000, got {(int(dut.uio_out.value.binstr[4:8], 2) & 0xF)}"
 
     # Finish simulation
     dut._log.info("Finishing simulation")
