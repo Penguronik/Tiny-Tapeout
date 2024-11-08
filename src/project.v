@@ -34,7 +34,7 @@ module tt_um_ronikant_jeremykam_tinyregisters (
     wire [7:0] MAR_data_out;
     wire [3:0] MAR_addr_out;
     wire [7:0] IR_bus_out;
-    wire [3:0] IR_opcode_out
+    wire [3:0] IR_opcode_out;
     assign uo_out = (select_register == 0) ? register_out :
         (select_register == 1) ? MAR_data_out :
         (select_register == 2) ? IR_bus_out : 8'b00000000;
