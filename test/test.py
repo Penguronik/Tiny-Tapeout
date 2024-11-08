@@ -107,13 +107,14 @@ async def input_mar_register_test(dut):
     # 2. Load data into the data register (n_load_data active)
     dut._log.info("Loading data into data register")
     dut.ui_in.value = 0b10011011
-    dut.uio_in.value |= (1 << 5)
-    dut.uio_in.value &= ~(1 << 4)
-    # dut.uio_in.value = 0b10
+    # dut.uio_in.value |= (1 << 5)
+    # dut.uio_in.value &= ~(1 << 4)
+    dut.uio_in.value = 0b01100000
     await FallingEdge(dut.clk)
     # dut.uio_in.value = 0b11
-    dut.uio_in.value |= (1 << 5)
-    dut.uio_in.value |= (1 << 4)
+    # dut.uio_in.value |= (1 << 5)
+    # dut.uio_in.value |= (1 << 4)
+    dut.uio_in.value = 0b01110000
     await FallingEdge(dut.clk)
     assert dut.uo_out.value == 0b10011011, f"Expected data 0b10011011, got {dut.uo_out.value}"
 
@@ -121,12 +122,14 @@ async def input_mar_register_test(dut):
     dut._log.info("Loading address into addr register")
     dut.ui_in.value = 0b01010110
     # dut.uio_in.value = 0b01
-    dut.uio_in.value &= ~(1 << 5)
-    dut.uio_in.value |= (1 << 4)
+    # dut.uio_in.value &= ~(1 << 5)
+    # dut.uio_in.value |= (1 << 4)
+    dut.uio_in.value = 0b01010000
     await FallingEdge(dut.clk)
     # dut.uio_in.value = 0b11
-    dut.uio_in.value |= (1 << 5)
-    dut.uio_in.value |= (1 << 4)
+    # dut.uio_in.value |= (1 << 5)
+    # dut.uio_in.value |= (1 << 4)
+    dut.uio_in.value = 0b01110000
     await FallingEdge(dut.clk)
     assert (int(dut.uio_out.value.binstr[-4:], 2) & 0xF) == 0b0110, f"Expected addr 0b0110, got {(int(dut.uio_out.value.binstr[-4:], 2) & 0xF)}"
 
@@ -142,12 +145,14 @@ async def input_mar_register_test(dut):
     # 5. Load both data and addr at the same time
     dut._log.info("Loading both data and addr simultaneously")
     # dut.uio_in.value = 0b00
-    dut.uio_in.value &= ~(1 << 5)
-    dut.uio_in.value &= ~(1 << 4)
+    # dut.uio_in.value &= ~(1 << 5)
+    # dut.uio_in.value &= ~(1 << 4)
+    dut.uio_in.value = 0b01000000
     await FallingEdge(dut.clk)
     # dut.uio_in.value = 0b11
-    dut.uio_in.value |= (1 << 5)
-    dut.uio_in.value |= (1 << 4)
+    # dut.uio_in.value |= (1 << 5)
+    # dut.uio_in.value |= (1 << 4)
+    dut.uio_in.value = 0b01110000
     await FallingEdge(dut.clk)
     assert dut.uo_out.value == 0b11101011, f"Expected data 0b11110000, got {dut.uo_out.value}"
     assert (int(dut.uio_out.value.binstr[-4:], 2) & 0xF) == 0b1011, f"Expected addr 0b1011, got {(int(dut.uio_out.value.binstr[-4:], 2) & 0xF)}"
