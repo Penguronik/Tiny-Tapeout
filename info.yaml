@@ -1,11 +1,11 @@
 # Tiny Tapeout project information
 project:
-  title:        "test"      # Project title
-  author:       "rskant"      # Your name
+  title:        "Tiny Registers"      # Project title
+  author:       "Roni Kant, Jeremy Kam"      # Your name
   discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
-  description:  "test TT project"      # One line description of what your project does
+  description:  "Various Registers for 8-bit CPU"      # One line description of what your project does
   language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
-  clock_hz:     0       # Clock frequency in Hz (or 0 if not applicable)
+  clock_hz:     50000000       # Clock frequency in Hz (or 0 if not applicable)
 
   # How many tiles your design occupies? A single tile is about 167x108 uM.
   tiles: "1x1"          # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2 or 8x2
@@ -45,14 +45,14 @@ pinout:
   uo[7]: "out_7"
 
   # Bidirectional pins
-  uio[0]: ""
-  uio[1]: ""
-  uio[2]: ""
-  uio[3]: ""
-  uio[4]: ""
-  uio[5]: ""
-  uio[6]: ""
-  uio[7]: ""
+  uio[0]: "extra_output_0"
+  uio[1]: "extra_output_1"
+  uio[2]: "extra_output_2"
+  uio[3]: "extra_output_3"
+  uio[4]: "extra_input_0"
+  uio[5]: "extra_input_1"
+  uio[6]: "register_select_0"
+  uio[7]: "register_select_1"
 
 # Do not change!
 yaml_version: 6
