@@ -31,6 +31,8 @@ Consists of a simple general purpose register, a memory address register, and an
 | Instruction register[3:0] [4 bit] | Output | Output to W bus                                                                                  |
 | Instruction register[7:4] [4 bit] | Output | Output to controller/sequences                                                                   |
 
+![instruction_register](https://github.com/user-attachments/assets/c028bcd4-4222-472e-88fe-22e5e55d85c5)
+
 - **Note**: All simulations pictured in this document were run using a 10 ns clock. The actual design will have a 100 ns clock.
 
 #### Test Input Connections
@@ -53,6 +55,9 @@ Consists of a simple general purpose register, a memory address register, and an
 | O [1 bit]              | Input        | Control signal that decides whether to read from the bus and load onto the output register.      |
 | Output register [8 bit] | Output     | Register data that will be written to the binary display.                                        |
 
+![register](https://github.com/user-attachments/assets/5a68a43f-1b65-41bf-a61f-91ef55d1b58e)
+
+
 #### Test Input Connections
 | Test Input Name | Description  |
 |-----------------|--------------|
@@ -70,13 +75,15 @@ Consists of a simple general purpose register, a memory address register, and an
 | B [1 bit]              | Input        | Control signal that decides whether to read from the bus and load onto the B register.           |
 | B register [8 bit]     | Output       | Register data that will be written to adder/subtractor.                                          |
 
+![register](https://github.com/user-attachments/assets/a6f0c398-0f53-40a4-8b95-c0c5876fcb8d)
+
 #### Test Input Connections
 | Test Input Name | Description  |
 |-----------------|--------------|
 | clk             | CLK          |
 | ui_in[7:0]      | W bus        |
-| uio_in [0]      | O            |
-| uo_out[7:0]     | Output register |
+| uio_in [0]      | B            |
+| uo_out[7:0]     | B register |
 
 ### Input and MAR
 
@@ -88,6 +95,8 @@ Consists of a simple general purpose register, a memory address register, and an
 | MA [1 bit]             | Input        | Control signal that decides if W bus data is to be written to the MAR register. Should not be active at the same time as the MD control signal. |
 | Input register [8 bit] | Output       | Register data to be written to memory.                                                           |
 | MAR [4 bit]            | Output       | Register data taken by RAM that controls where the data is to be written.                        |
+
+![input_mar_register](https://github.com/user-attachments/assets/478442b7-4425-4ea3-8df3-a2ce1816a44c)
 
 #### Test Input Connections
 | Test Input Name | Description  |
