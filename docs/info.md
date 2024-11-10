@@ -66,7 +66,7 @@ Consists of a simple general purpose register, a memory address register, and an
 | \\L<sub>O</sub> [1 bit]  | Input        | Control signal that decides whether to read from the bus and load onto the output register.      |
 | Output register [8 bit] | Output     | Register data that will be written to the binary display.                                        |
 
-#### Pinouts when instruction register is selected
+#### Pinouts when output register is selected
 | Test Input Name | Description  |
 |-----------------|--------------|
 | clk             | CLK          |
@@ -93,7 +93,7 @@ Consists of a simple general purpose register, a memory address register, and an
 | \\L<sub>B</sub> [1 bit] | Input        | Control signal that decides whether to read from the bus and load onto the B register.           |
 | B register [8 bit]     | Output       | Register data that will be written to adder/subtractor.                                          |
 
-#### Pinouts when instruction register is selected
+#### Pinouts when b register is selected
 | Test Input Name | Description  |
 |-----------------|--------------|
 | clk             | CLK          |
@@ -122,7 +122,7 @@ Consists of a simple general purpose register, a memory address register, and an
 | Input register [8 bit] | Output       | Register data to be written to memory.                                                           |
 | MAR [4 bit]            | Output       | Register data taken by RAM that controls where the data is to be written.                        |
 
-#### Pinouts when instruction register is selected
+#### Pinouts when input and mar register is selected
 | Test Input Name | Description  |
 |-----------------|--------------|
 | clk             | CLK          |
