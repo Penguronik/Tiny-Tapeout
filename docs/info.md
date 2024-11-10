@@ -25,7 +25,7 @@ Consists of a simple general purpose register, a memory address register, and an
 |------------------------|--------------|--------------------------------------------------------------------------------------------------|
 | CLK [1 bit]            | Input        | Clock signal. Executes actions on rising edges.                                                  |
 | W bus [8 bit]          | Input        | Takes 8 bits with the most significant 4 bits representing the opcode and the least significant 4 bits representing any other necessary value. Write them to the instruction register. |
-| I [1 bit]              | Input        | Control signal that decides whether to read from the bus.                                        |
+| \L<sub>I</sub> [1 bit]              | Input        | Control signal that decides whether to read from the bus.                                        |
 | I [1 bit]              | Input        | Control signal that decides tri-state buffer output to bus (drive register value if enabled, Z if disabled). |
 | CLR [1 bit]            | Input        | Clears the instruction register’s data.                                                          |
 | Instruction register[3:0] [4 bit] | Output | Output to W bus                                                                                  |
